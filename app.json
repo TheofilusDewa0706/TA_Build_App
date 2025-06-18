@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "klasifikasi-rumah-adat",
+    "slug": "klasifikasi-rumah-adat",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/waraebo-final.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/waraebo-final.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/waraebo-kecil.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.lahelu07.skripsi"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a715f01d-9af4-4bc2-8ee9-cafe0b0acafc"
+      }
+    },
+    "owner": "theodewa"
+  }
+}
