@@ -16,6 +16,19 @@ const ResultScreen = ({ route, navigation }) => {
   const [loading, setLoading] = useState(false);
   const [classificationResult, setClassificationResult] = useState(result);
   const [selectedImage, setSelectedImage] = useState(imageUri);
+  const [isValidHouse, setIsValidHouse] = useState(null);
+
+  const MIN_CONFIDENCE = 0.7;
+  const MAX_ENTROPY = 1.0;
+
+  useEffect(() => {
+    if (classificationResult) {
+      const valid =
+        classificationResult.confidence >= MIN_CONFIDENCE &&
+        classificationResult.entropy <= MAX_ENTROPY;
+      setIsValidHouse(valid);
+    }
+  }, [classificationResult]);
 
   const pickImage = async () => {
     try {
@@ -38,6 +51,7 @@ const ResultScreen = ({ route, navigation }) => {
     try {
       setLoading(true);
       setSelectedImage(uri);
+      setIsValidHouse(null);
 
       const formData = new FormData();
       formData.append("file", {
@@ -68,6 +82,26 @@ const ResultScreen = ({ route, navigation }) => {
     if (fromGallery) pickImage();
   }, []);
 
+  const renderResult = () => {
+    if (!classificationResult) return null;
+
+    if (isValidHouse === false) {
+      return (
+        <View style={styles.resultContainer}>
+          <Text style={styles.invalidText}>Bukan Rumah Adat NTT</Text>
+        </View>
+      );
+    }
+
+    return (
+      <View style={styles.resultContainer}>
+        <Text style={styles.validText}>
+          Jenis Rumah: {classificationResult.class_name}
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Hasil Klasifikasi</Text>
@@ -79,11 +113,7 @@ const ResultScreen = ({ route, navigation }) => {
       {loading ? (
         <ActivityIndicator size="large" color="#4CAF50" />
       ) : classificationResult ? (
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>
-            Jenis Rumah: {classificationResult.class_name}
-          </Text>
-        </View>
+        renderResult()
       ) : (
         <Text style={styles.placeholderText}>Hasil akan muncul di sini</Text>
       )}
@@ -127,10 +157,17 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     alignItems: "center",
   },
-  resultText: {
+  validText: {
     fontSize: 18,
     marginBottom: 10,
-    color: "#555",
+    color: "#4CAF50",
+    fontWeight: "bold",
+  },
+  invalidText: {
+    fontSize: 18,
+    marginBottom: 10,
+    color: "#F44336",
+    fontWeight: "bold",
   },
   placeholderText: {
     fontSize: 16,
